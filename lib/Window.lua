@@ -348,6 +348,8 @@ function Window:textinput(t)
 end
 
 function Window:draw()
+  local scx, scy, scw, sch = love.graphics.getScissor( )
+
   love.graphics.setScissor(self:get("left"), self:get("top"), self:get("width"), self:get("height"))
   love.graphics.draw(self:get("canvas"), self:get("left"), self:get("top"))
 
@@ -359,7 +361,7 @@ function Window:draw()
     end
   end
   
-  love.graphics.setScissor()
+  love.graphics.setScissor(scx, scy, scw, sch)
 end
 
 -- Pre-render window for draw method.  Call this when your window is dirty.

@@ -177,7 +177,15 @@ function Button:draw(x, y)
   if x == nil then x = 0 end
   if y == nil then y = 0 end
   
-  --love.graphics.setScissor(self:get("left") + x, self:get("top") + y, self:get("width") - 5, self:get("height") - 5)
+  local scx, scy, scw, sch = love.graphics.getScissor( )
+
+  local nw = self:get("width")
+  local nh = self:get("height")
+  if nw + self:get("left") + x < scw + scx 
+      and nh + self:get("top") + y < sch + scy 
+  then
+    love.graphics.setScissor(self:get("left") + x, self:get("top") + y, nw, nh)
+  end
   love.graphics.draw(self:get("canvas"), self:get("left") + x, self:get("top") + y)
   love.graphics.setColor(25, 25, 25)
   local fnt = love.graphics.getFont()
@@ -189,7 +197,7 @@ function Button:draw(x, y)
   end
   love.graphics.print(self:get("text"), self:get("left") + cx + x, self:get("top") + 12 + y + cy)
   love.graphics.setColor(255, 255, 255)
-  --love.graphics.setScissor()
+  love.graphics.setScissor(scx, scy, scw, sch)
 end
 
 -- Pre-render Button for draw method.  Call this when your Button is dirty.
