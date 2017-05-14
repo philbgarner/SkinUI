@@ -18,13 +18,13 @@ Text entry supports moving the cursor back through the text with the left/right 
 
 ## Getting Started
 
-1. Clone or extract this repository to the same folder as your main.lua file.
+1. Clone or extract the lib folder in this repository to the same folder as your main.lua file.
 
-2. Include the library in your project by adding this line to your main.lua file ('lib' in the repository):
+2. Include the library in your project by adding this line to your main.lua file ('lib' folder in the repository):
 
 ```lua
 
-skinui = require "lib/SkinUI"
+skinui = require "lib.SkinUI"
 
 ```
 
