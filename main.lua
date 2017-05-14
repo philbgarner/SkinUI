@@ -18,7 +18,11 @@ function love.load()
   btnOK:set("text", "OK")
   skinui:addChild("win1", btnOK)
 
-  skinui:get("win1"):size(725, 150)
+  local textbox1 = skinui.Container:new("textbox1", 25, 115, skinui.theme)
+  textbox1:size(550, 125)
+  skinui:addChild("win1", textbox1)
+
+  skinui:get("win1"):size(725, 250)
 end
 
 function love.draw()
