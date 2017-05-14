@@ -40,7 +40,7 @@ end
 
 ```
 
-4. Add hooks to the remainder of the love input methods (IE: love.textinput, love.mousemoved, etc.  See example projects).
+4. Add hooks to the remainder of the love input methods (IE: love.textinput, love.mousemoved, etc.  See projects in the examples folder).
 
 5. Start adding windows and controls!  As a general rule, windows are added to the root node (skinui library itself) while controls are added to the window as a child.  The exception will be container type objects which allow scrolling, etc (future state).
 
