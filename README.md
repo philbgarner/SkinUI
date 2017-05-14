@@ -79,6 +79,8 @@ end
 
 Gives us this result:
 
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Textinput and OK button on a window.")
+
 
 ## License
 
