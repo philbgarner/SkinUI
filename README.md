@@ -79,3 +79,7 @@ end
 
 Gives us this result:
 
+
+## License
+
+This project is released under the MIT license. Please see LICENSE.md for details.
