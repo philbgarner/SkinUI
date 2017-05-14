@@ -79,7 +79,7 @@ end
 
 Gives us this result:
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Textinput and OK button on a window.")
+![alt text](https://github.com/philbgarner/SkinUI/blob/master/SkinUI-SampleScreenshot.png "Textinput and OK button on a window.")
 
 
 ## License
