@@ -96,6 +96,7 @@ end
 
 -- Master method
 function Window:focus()
+  if self:get("hidden") then return end
   self:set("hasFocus", true)
   self:onfocus()
 end
@@ -106,6 +107,7 @@ end
 
 -- Master method
 function Window:blur()
+  if self:get("hidden") then return end
   self:set("hasFocus", false)
   self:onblur()
 end
@@ -125,6 +127,7 @@ end
 
 -- Master method
 function Window:click(x, y, button, istouch)
+  if self:get("hidden") then return end
   local wnd = self:get("windows")
   local wx = self:get("left")
   local wy = self:get("top")
@@ -162,9 +165,19 @@ function Window:onunload()
   
 end
 
+function Window:hide()
+  self:set("hidden", true)
+end
+
+function Window:show()
+  self:set("hidden", false)
+end
+
+
 -- Love2d Hook Methods
 
 function Window:mousepressed(x, y, button, istouch)
+  if self:get("hidden") then return end
 --  print(self:get("id"))
 --  print("mousedown")
   local thm = self:get("theme")
@@ -208,6 +221,7 @@ function Window:mousepressed(x, y, button, istouch)
 end
 
 function Window:mousemoved(x, y, dx, dy, istouch)
+  if self:get("hidden") then return end
 --  print(self:get("id"))
 --  print("mousemoved")
   local thm = self:get("theme")
@@ -239,6 +253,7 @@ function Window:mousemoved(x, y, dx, dy, istouch)
 end
 
 function Window:mousereleased(x, y, button, istouch)
+  if self:get("hidden") then return end
 --  print(self:get("id"))
 --  print("mouseup")
 
@@ -255,6 +270,7 @@ function Window:mousereleased(x, y, button, istouch)
 end
 
 function Window:update(dt, dx, dy)
+  if self:get("hidden") then return end
 
   if dx == nil then dx = 0 end
   if dy == nil then dy = 0 end
@@ -319,7 +335,8 @@ function Window:update(dt, dx, dy)
 end
 
 function Window:keypressed(key, scancode)
-  
+  if self:get("hidden") then return end
+
   local wins = self:get("windows")
 
   if #wins > 0 then
@@ -334,6 +351,7 @@ function Window:keypressed(key, scancode)
 end
 
 function Window:textinput(t)
+  if self:get("hidden") then return end
   local wins = self:get("windows")
 
   if #wins > 0 then
@@ -348,6 +366,8 @@ function Window:textinput(t)
 end
 
 function Window:draw()
+  if self:get("hidden") then return end
+
   local scx, scy, scw, sch = love.graphics.getScissor( )
 
   love.graphics.setScissor(self:get("left"), self:get("top"), self:get("width"), self:get("height"))

@@ -147,7 +147,6 @@ function Textinput:update(dt)
 end
 
 function Textinput:keypressed(key, scancode)
-  print(key)
   if key == "backspace" and self:get("cursor") > 0 then
     local lp = string.sub(self:get("text"), 1, self:get("cursor") - 1)
     local rp = string.sub(self:get("text"), self:get("cursor") + 1)
@@ -195,8 +194,6 @@ function Textinput:keypressed(key, scancode)
   elseif key == "end" then
       self:set("cursor", string.len(self:get("text")))
   end
-  
-  
 end
 
 function Textinput:textinput(t)

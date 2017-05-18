@@ -14,6 +14,7 @@ skinui.Window = require "lib.Window"
 skinui.Textinput = require "lib.Textinput"
 skinui.Button = require "lib.Button"
 skinui.Container = require "lib.Container"
+skinui.Textbox = require "lib.Textbox"
 
 function skinui:load()
   skinui.theme = themes:new()
