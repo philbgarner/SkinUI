@@ -1,6 +1,6 @@
 --[[
 
-  Button class
+  Label class
   
   By Phil Garner
   May 2017
@@ -8,23 +8,23 @@
   
 ]]--
 
-local Button = {}
-Button.__index = Button
+local Label = {}
+Label.__index = Label
 
-function Button:new(id, x, y, theme)
+function Label:new(id, x, y, theme)
   
   local win = {
       
       props = {
           id = id
           ,resizable = false
-          ,width = theme:get("images").button_med:getWidth()
-          ,height = theme:get("images").button_med:getHeight()
+          ,width = theme:get("images").Label_med:getWidth()
+          ,height = theme:get("images").Label_med:getHeight()
           ,left = x
           ,top = y
           ,opacity = 1
           ,alwaysontop = false
-          ,bg_autosize = false  -- If not autosize, then it tiles when the Button exceeds the background image size.
+          ,bg_autosize = false  -- If not autosize, then it tiles when the Label exceeds the background image size.
           ,theme = theme
           ,canvas = nil
           ,quad = nil
@@ -38,7 +38,7 @@ function Button:new(id, x, y, theme)
         }
     
     }
-  setmetatable(win, Button)
+  setmetatable(win, Label)
   
   win:render()
   win:load()
@@ -46,7 +46,7 @@ function Button:new(id, x, y, theme)
   
 end
 
-function Button:set(prop, val)
+function Label:set(prop, val)
 
   self.props[prop] = val
   
@@ -54,7 +54,7 @@ function Button:set(prop, val)
   
 end
 
-function Button:get(prop)
+function Label:get(prop)
     
   if self.props[prop] == nil then
     return false
@@ -64,116 +64,106 @@ function Button:get(prop)
   
 end
 
-function Button:size(w, h)
+function Label:size(w, h)
   self:set("width", w)
   self:set("height", h)
   self:render()
 end
 
 -- Master method
-function Button:resize()
+function Label:resize()
   self:onresize()
 end
 -- User defined method.
-function Button:onresize()
+function Label:onresize()
   
 end
 
 -- Master method
-function Button:blur()
+function Label:blur()
   self:set("hasFocus", false)
   self:onblur()
 end
 -- User defined method.
-function Button:onblur()
+function Label:onblur()
   
 end
 
 -- Master method
-function Button:focus()
+function Label:focus()
   self:set("hasFocus", true)
   self:onfocus()
 end
 -- User defined method.
-function Button:onfocus()
+function Label:onfocus()
   
 end
 
 -- Master method
-function Button:click(x, y, button, istouch)
-  self:onclick(x, y, button, istouch)
+function Label:click(x, y, Label, istouch)
+  self:onclick(x, y, Label, istouch)
 end
 -- User defined method.
-function Button:onclick(x, y, button, istouch)
+function Label:onclick(x, y, Label, istouch)
   print(self:get("id"))
   print("click")
 end
 
 -- Master method
-function Button:load()
+function Label:load()
   self:onload()
 end
 -- User defined method.
-function Button:onload()
+function Label:onload()
   
 end
 
 -- Master method
-function Button:unload()
+function Label:unload()
   self:onunload()
 end
 -- User defined method.
-function Button:onunload()
+function Label:onunload()
   
 end
 
 -- Love2d Hook Methods
 
-function Button:textinput(t)
-
+function Label:textinput(t)
   
 end
 
-function Button:mousepressed(x, y, button, istouch)
---  print(self:get("id"))
---  print("mousedown")
-  self:set("downSprite", true)
+function Label:mousepressed(x, y, Label, istouch)
+
   self:render()
 end
 
-function Button:mousemoved(x, y, dx, dy, istouch)
+function Label:mousemoved(x, y, dx, dy, istouch)
 --  print(self:get("id"))
 --  print("mousemoved")
 end
 
-function Button:mousereleased(x, y, button, istouch)
---  print(self:get("id"))
---  print("mouseup")
-  self:set("downSprite", false)
+function Label:mousereleased(x, y, Label, istouch)
+
   self:render()
 end
 
-function Button:update(dt)
-  if self:get("downSprite") and not love.mouse.isDown(1) then
-    self:set("downSprite", false)
-    self:render()
-  end
+function Label:update(dt)
+
 end
 
-function Button:keypressed(key, scancode)
+function Label:keypressed(key, scancode)
   
   print(self:get("id"))
   print(key, scancode)
   
 end
 
-function Button:Button(t)
-  
-  self:set("text", self:get("text") .. t)
+function Label:textinput(t)
   
 end
 
-function Button:draw(x, y)
+function Label:draw(x, y)
   if x == nil then x = 0 end
   if y == nil then y = 0 end
   
@@ -191,17 +181,13 @@ function Button:draw(x, y)
   local fnt = love.graphics.getFont()
   local cx = self:get("width") / 2 - fnt:getWidth(self:get("text")) / 2
   local cy = 0
-  if self:get("downSprite") then
-    cx = cx + 2
-    cy = 2
-  end
   love.graphics.print(self:get("text"), self:get("left") + cx + x, self:get("top") + 12 + y + cy)
   love.graphics.setColor(255, 255, 255)
   love.graphics.setScissor(scx, scy, scw, sch)
 end
 
--- Pre-render Button for draw method.  Call this when your Button is dirty.
-function Button:render(scale)
+-- Pre-render Label for draw method.  Call this when your Label is dirty.
+function Label:render(scale)
   if scale == nil then scale = 1 end
   
   local canv = love.graphics.newCanvas(self:get("width"), self:get("height"))
@@ -211,20 +197,16 @@ function Button:render(scale)
       ,0
       ,self:get("width")
       ,self:get("height")
-      ,thm:get("images").button_med:getWidth()
-      ,thm:get("images").button_med:getHeight()
+      ,thm:get("images").Label_med:getWidth()
+      ,thm:get("images").Label_med:getHeight()
     )
   
   love.graphics.setCanvas(canv)
-    if not self:get("downSprite") then
-      love.graphics.draw(thm:get("images").button_med, q, 0, 0)
-    else
-      love.graphics.draw(thm:get("images").button_down_med, q, 0, 0)
-    end
+ 
   love.graphics.setCanvas()
   self:set("canvas", love.graphics.newImage(canv:newImageData()))
   self:set("quad", q)
   
 end
 
-return Button
+return Label
