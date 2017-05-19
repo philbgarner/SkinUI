@@ -36,6 +36,11 @@ function skinui:add(obj)
   skinui.window_focusid = obj:get("id")
 end
 
+function skinui:remove(id)
+  table.remove(skinui.windows, skinui:find(id))
+  if #skinui.windows > 0 then skinui.window_focusid = skinui.windows[1]:get("id") else skinui.window_focusid = "" end
+end
+
 function skinui:addChild(id, obj)
   local index = skinui:find(id)
   if not index then return end

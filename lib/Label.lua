@@ -11,15 +11,15 @@
 local Label = {}
 Label.__index = Label
 
-function Label:new(id, x, y, theme)
+function Label:new(id, x, y, w, h, theme)
   
   local win = {
       
       props = {
           id = id
           ,resizable = false
-          ,width = theme:get("images").Label_med:getWidth()
-          ,height = theme:get("images").Label_med:getHeight()
+          ,width = w
+          ,height = w
           ,left = x
           ,top = y
           ,opacity = 1
@@ -27,11 +27,14 @@ function Label:new(id, x, y, theme)
           ,bg_autosize = false  -- If not autosize, then it tiles when the Label exceeds the background image size.
           ,theme = theme
           ,canvas = nil
-          ,quad = nil
           
           ,text = ""
+          ,fontSize = 12
+          ,fontColr = {255, 255, 255, 255}
           
           ,hidden = false
+          
+          ,font = love.graphics.getFont()
           
           ,hasFocus = false
           ,downSprite = false
@@ -111,6 +114,7 @@ end
 
 -- Master method
 function Label:load()
+  self:fontSize(self:get("fontSize"))
   self:onload()
 end
 -- User defined method.
@@ -125,6 +129,12 @@ end
 -- User defined method.
 function Label:onunload()
   
+end
+
+-- Label-specific methods
+
+function Label:fontSize(s)
+  self:set("fontSize", s)
 end
 
 -- Love2d Hook Methods
@@ -177,13 +187,14 @@ function Label:draw(x, y)
     love.graphics.setScissor(self:get("left") + x, self:get("top") + y, nw, nh)
   end
   love.graphics.draw(self:get("canvas"), self:get("left") + x, self:get("top") + y)
-  love.graphics.setColor(25, 25, 25)
+  local colr = self:get("fontColr")
+  love.graphics.setColor(colr[1], colr[2], colr[3], colr[4])
+  love.graphics.setFont(love.graphics.newFont(self:get("fontSize")))
   local fnt = love.graphics.getFont()
-  local cx = self:get("width") / 2 - fnt:getWidth(self:get("text")) / 2
-  local cy = 0
-  love.graphics.print(self:get("text"), self:get("left") + cx + x, self:get("top") + 12 + y + cy)
+  love.graphics.print(self:get("text"), self:get("left") + x, self:get("top") + y)
   love.graphics.setColor(255, 255, 255)
   love.graphics.setScissor(scx, scy, scw, sch)
+  love.graphics.setFont(love.graphics.newFont(12))
 end
 
 -- Pre-render Label for draw method.  Call this when your Label is dirty.
@@ -192,20 +203,13 @@ function Label:render(scale)
   
   local canv = love.graphics.newCanvas(self:get("width"), self:get("height"))
   local thm = self:get("theme")
-  local q = love.graphics.newQuad(
-      0
-      ,0
-      ,self:get("width")
-      ,self:get("height")
-      ,thm:get("images").Label_med:getWidth()
-      ,thm:get("images").Label_med:getHeight()
-    )
+
   
   love.graphics.setCanvas(canv)
  
   love.graphics.setCanvas()
   self:set("canvas", love.graphics.newImage(canv:newImageData()))
-  self:set("quad", q)
+
   
 end
 
