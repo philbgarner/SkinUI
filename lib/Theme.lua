@@ -25,6 +25,9 @@ function Theme:new(images, dimensions)
       ,border_s = {}
       ,border_w = {}
       ,textinput = {}
+      ,lineinput = {}
+      ,lineinput_left = {}
+      ,lineinput_right = {}
       
       ,textbox_bg = {}
       ,textbox_ne = {}
@@ -64,6 +67,9 @@ function Theme:new(images, dimensions)
   if images.textbox_s == nil then images.textbox_s = "lib/themes/default/container_s.png" end
   if images.textbox_w == nil then images.textbox_w = "lib/themes/default/container_w.png" end
   if images.textbox_e == nil then images.textbox_e = "lib/themes/default/container_e.png" end
+  if images.lineinput == nil then images.lineinput = "lib/themes/default/lineinput_120x35.png" end
+  if images.lineinput_left == nil then images.lineinput_left = "lib/themes/default/lineinput_left_5x35.png" end
+  if images.lineinput_right == nil then images.lineinput_right = "lib/themes/default/lineinput_right_5x35.png" end
       
   images.bg_image = love.graphics.newImage(images.bg_image)
   images.corner_nw = love.graphics.newImage(images.corner_nw)
@@ -86,6 +92,9 @@ function Theme:new(images, dimensions)
   images.textbox_e = love.graphics.newImage(images.textbox_e)
   images.textbox_w = love.graphics.newImage(images.textbox_w)
   images.textbox_s = love.graphics.newImage(images.textbox_s)
+  images.lineinput_right = love.graphics.newImage(images.lineinput_right)
+  images.lineinput_left = love.graphics.newImage(images.lineinput_left)
+  images.lineinput = love.graphics.newImage(images.lineinput)
   
   images.bg_image:setWrap(repeatStyle, repeatStyle)
   images.corner_nw:setWrap(repeatStyle, repeatStyle)
@@ -96,6 +105,9 @@ function Theme:new(images, dimensions)
   images.border_e:setWrap(repeatStyle, repeatStyle)
   images.border_s:setWrap(repeatStyle, repeatStyle)
   images.border_w:setWrap(repeatStyle, repeatStyle)
+  images.lineinput:setWrap(repeatStyle, repeatStyle)
+  images.lineinput_left:setWrap(repeatStyle, repeatStyle)
+  images.lineinput_right:setWrap(repeatStyle, repeatStyle)
   
   dimensions.bg_image.width = images.bg_image:getWidth()
   dimensions.bg_image.height = images.bg_image:getHeight()
@@ -117,28 +129,34 @@ function Theme:new(images, dimensions)
   dimensions.border_s.height = images.border_s:getHeight()
   dimensions.textinput.width = images.textinput:getWidth()
   dimensions.textinput.height = images.textinput:getHeight()
-  dimensions.button_med = images.button_med:getWidth()
-  dimensions.button_med = images.button_med:getHeight()
-  dimensions.button_down_med = images.button_down_med:getWidth()
+  dimensions.button_med.width = images.button_med:getWidth()
+  dimensions.button_med.height = images.button_med:getHeight()
+  dimensions.button_down_med.width = images.button_down_med:getWidth()
   dimensions.button_down_med = images.button_down_med:getHeight()
-  dimensions.textbox_bg = images.textbox_bg:getWidth()
-  dimensions.textbox_bg = images.textbox_bg:getHeight()
-  dimensions.textbox_ne = images.textbox_ne:getWidth()
-  dimensions.textbox_ne = images.textbox_ne:getHeight()
-  dimensions.textbox_se = images.textbox_se:getWidth()
-  dimensions.textbox_se = images.textbox_se:getHeight()
-  dimensions.textbox_sw = images.textbox_sw:getWidth()
-  dimensions.textbox_sw = images.textbox_sw:getHeight()
-  dimensions.textbox_nw = images.textbox_nw:getWidth()
-  dimensions.textbox_nw = images.textbox_nw:getHeight()
-  dimensions.textbox_n = images.textbox_n:getWidth()
-  dimensions.textbox_n = images.textbox_n:getHeight()
-  dimensions.textbox_e = images.textbox_e:getWidth()
-  dimensions.textbox_e = images.textbox_e:getHeight()
-  dimensions.textbox_w = images.textbox_w:getWidth()
-  dimensions.textbox_w = images.textbox_w:getHeight()
-  dimensions.textbox_s = images.textbox_s:getWidth()
-  dimensions.textbox_s = images.textbox_s:getHeight()
+  dimensions.textbox_bg.width = images.textbox_bg:getWidth()
+  dimensions.textbox_bg.height = images.textbox_bg:getHeight()
+  dimensions.textbox_ne.width = images.textbox_ne:getWidth()
+  dimensions.textbox_ne.height = images.textbox_ne:getHeight()
+  dimensions.textbox_se.width = images.textbox_se:getWidth()
+  dimensions.textbox_se.height = images.textbox_se:getHeight()
+  dimensions.textbox_sw.width = images.textbox_sw:getWidth()
+  dimensions.textbox_sw.height = images.textbox_sw:getHeight()
+  dimensions.textbox_nw.width = images.textbox_nw:getWidth()
+  dimensions.textbox_nw.height = images.textbox_nw:getHeight()
+  dimensions.textbox_n.width = images.textbox_n:getWidth()
+  dimensions.textbox_n.height = images.textbox_n:getHeight()
+  dimensions.textbox_e.width = images.textbox_e:getWidth()
+  dimensions.textbox_e.height = images.textbox_e:getHeight()
+  dimensions.textbox_w.width = images.textbox_w:getWidth()
+  dimensions.textbox_w.height = images.textbox_w:getHeight()
+  dimensions.textbox_s.width = images.textbox_s:getWidth()
+  dimensions.textbox_s.height = images.textbox_s:getHeight()
+  dimensions.lineinput_right.width = images.lineinput_right:getWidth()
+  dimensions.lineinput_right.height = images.lineinput_right:getHeight()
+  dimensions.lineinput_left.width = images.lineinput_left:getWidth()
+  dimensions.lineinput_left.height = images.lineinput_left:getHeight()
+  dimensions.lineinput.width = images.lineinput:getWidth()
+  dimensions.lineinput.height = images.lineinput:getHeight()
   
   local thm = {
 

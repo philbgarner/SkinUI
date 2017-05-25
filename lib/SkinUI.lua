@@ -16,6 +16,7 @@ skinui.Button = require "lib.Button"
 skinui.Container = require "lib.Container"
 skinui.Textbox = require "lib.Textbox"
 skinui.Label = require "lib.Label"
+skinui.Lineinput = require "lib.Lineinput"
 
 function skinui:load()
   skinui.theme = themes:new()
@@ -33,10 +34,11 @@ end
 
 function skinui:add(obj)
   table.insert(skinui.windows, obj)
-  skinui.window_focusid = obj:get("id")
+  skinui:totop(obj:get("id"))
 end
 
 function skinui:remove(id)
+  if not skinui:find(id) then return false end
   table.remove(skinui.windows, skinui:find(id))
   if #skinui.windows > 0 then skinui.window_focusid = skinui.windows[1]:get("id") else skinui.window_focusid = "" end
 end
@@ -193,6 +195,15 @@ function skinui:keypressed(key, scancode)
   end
   
   return false
+  
+end
+
+function skinui:totop(id)
+  local i = skinui:find(id)
+  local wn = skinui.windows[i]
+  
+  skinui.window_focusid = wn:get("id")
+  skinui:move(i, 1)
   
 end
 

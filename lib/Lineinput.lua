@@ -1,6 +1,6 @@
 --[[
 
-  Textinput class
+  Lineinput class
   
   By Phil Garner
   May 2017
@@ -8,23 +8,23 @@
   
 ]]--
 
-local Textinput = {}
-Textinput.__index = Textinput
+local Lineinput = {}
+Lineinput.__index = Lineinput
 
-function Textinput:new(id, x, y, theme)
+function Lineinput:new(id, x, y, w, theme)
   
   local win = {
       
       props = {
           id = id
           ,resizable = false
-          ,width = theme:get("images").textinput:getWidth()
-          ,height = theme:get("images").textinput:getHeight()
+          ,width = w
+          ,height = theme:get("images").lineinput:getHeight()
           ,left = x
           ,top = y
           ,opacity = 1
           ,alwaysontop = false
-          ,bg_autosize = false  -- If not autosize, then it tiles when the Textinput exceeds the background image size.
+          ,bg_autosize = false  -- If not autosize, then it tiles when the Lineinput exceeds the background image size.
           ,theme = theme
           ,canvas = nil
           ,quad = nil
@@ -36,14 +36,14 @@ function Textinput:new(id, x, y, theme)
         }
     
     }
-  setmetatable(win, Textinput)
+  setmetatable(win, Lineinput)
   
   win:render()
   return win
   
 end
 
-function Textinput:set(prop, val)
+function Lineinput:set(prop, val)
 
   self.props[prop] = val
   
@@ -51,7 +51,7 @@ function Textinput:set(prop, val)
   
 end
 
-function Textinput:get(prop)
+function Lineinput:get(prop)
     
   if self.props[prop] == nil then
     return false
@@ -61,94 +61,94 @@ function Textinput:get(prop)
   
 end
 
-function Textinput:size(w, h)
+function Lineinput:size(w, h)
   self:set("width", w)
   self:set("height", h)
   self:render()
 end
 
 -- Master method
-function Textinput:resize()
+function Lineinput:resize()
   self:onresize()
 end
 -- User defined method.
-function Textinput:onresize()
+function Lineinput:onresize()
   
 end
 
 -- Master method
-function Textinput:blur()
+function Lineinput:blur()
   self:set("hasFocus", false)
   self:onblur()
 end
 -- User defined method.
-function Textinput:onblur()
+function Lineinput:onblur()
   
 end
 
 -- Master method
-function Textinput:focus()
+function Lineinput:focus()
   self:set("hasFocus", true)
   local tx = self:get("text")
   self:set("cursor", #tx)
   self:onfocus()
 end
 -- User defined method.
-function Textinput:onfocus()
+function Lineinput:onfocus()
   
 end
 
 -- Master method
-function Textinput:click(x, y, button, istouch)
+function Lineinput:click(x, y, button, istouch)
   self:onclick(x, y, button, istouch)
 end
 -- User defined method.
-function Textinput:onclick(x, y, button, istouch)
+function Lineinput:onclick(x, y, button, istouch)
   print(self:get("id"))
   print("click")
 end
 
 -- Master method
-function Textinput:load()
+function Lineinput:load()
   self:onload()
 end
 -- User defined method.
-function Textinput:onload()
+function Lineinput:onload()
   
 end
 
 -- Master method
-function Textinput:unload()
+function Lineinput:unload()
   self:onunload()
 end
 -- User defined method.
-function Textinput:onunload()
+function Lineinput:onunload()
   
 end
 
 -- Love2d Hook Methods
 
-function Textinput:mousepressed(x, y, button, istouch)
+function Lineinput:mousepressed(x, y, button, istouch)
 --  print(self:get("id"))
 --  print("mousedown")
 
 end
 
-function Textinput:mousemoved(x, y, dx, dy, istouch)
+function Lineinput:mousemoved(x, y, dx, dy, istouch)
 --  print(self:get("id"))
 --  print("mousemoved")
 end
 
-function Textinput:mousereleased(x, y, button, istouch)
+function Lineinput:mousereleased(x, y, button, istouch)
 --  print(self:get("id"))
 --  print("mouseup")
 end
 
-function Textinput:update(dt)
+function Lineinput:update(dt)
   
 end
 
-function Textinput:keypressed(key, scancode)
+function Lineinput:keypressed(key, scancode)
   if key == "backspace" and self:get("cursor") > 0 then
     local lp = string.sub(self:get("text"), 1, self:get("cursor") - 1)
     local rp = string.sub(self:get("text"), self:get("cursor") + 1)
@@ -198,7 +198,7 @@ function Textinput:keypressed(key, scancode)
   end
 end
 
-function Textinput:textinput(t)
+function Lineinput:textinput(t)
   
   local lp = string.sub(self:get("text"), 1, self:get("cursor"))
   local rp = string.sub(self:get("text"), self:get("cursor") + 1)
@@ -211,8 +211,7 @@ function Textinput:textinput(t)
     
 end
 
-
-function Textinput:draw(x, y)
+function Lineinput:draw(x, y)
   if x == nil then x = 0 end
   if y == nil then y = 0 end
 
@@ -238,27 +237,45 @@ function Textinput:draw(x, y)
   love.graphics.setScissor(scx, scy, scw, sch)
 end
 
--- Pre-render Textinput for draw method.  Call this when your Textinput is dirty.
-function Textinput:render(scale)
+-- Pre-render Lineinput for draw method.  Call this when your Lineinput is dirty.
+function Lineinput:render(scale)
   if scale == nil then scale = 1 end
   
   local canv = love.graphics.newCanvas(self:get("width"), self:get("height"))
   local thm = self:get("theme")
   local q = love.graphics.newQuad(
-      0
+      thm:get("images").lineinput_left:getWidth()
       ,0
       ,self:get("width")
       ,self:get("height")
-      ,thm:get("images").textinput:getWidth()
-      ,thm:get("images").textinput:getHeight()
+      ,thm:get("images").lineinput:getWidth()
+      ,thm:get("images").lineinput:getHeight()
+    )
+  local ql = love.graphics.newQuad(
+      0
+      ,0
+      ,thm:get("images").lineinput_left:getWidth()
+      ,self:get("height")
+      ,thm:get("images").lineinput_left:getWidth()
+      ,thm:get("images").lineinput_left:getHeight()
+    )
+  local qr = love.graphics.newQuad(
+      thm:get("images").lineinput:getWidth() + thm:get("images").lineinput_left:getWidth()
+      ,0
+      ,self:get("width")
+      ,self:get("height")
+      ,thm:get("images").lineinput_right:getWidth()
+      ,thm:get("images").lineinput_right:getHeight()
     )
   
   love.graphics.setCanvas(canv)
-    love.graphics.draw(thm:get("images").textinput, q, 0, 0)    
+    love.graphics.draw(thm:get("images").lineinput_left, ql, 0, 0)    
+    love.graphics.draw(thm:get("images").lineinput, q, thm:get("images").lineinput_left:getWidth(), 0)    
+    love.graphics.draw(thm:get("images").lineinput_right, qr, self:get("width") - thm:get("images").lineinput_right:getWidth(), 0)    
   love.graphics.setCanvas()
   self:set("canvas", love.graphics.newImage(canv:newImageData()))
   self:set("quad", q)
   
 end
 
-return Textinput
+return Lineinput

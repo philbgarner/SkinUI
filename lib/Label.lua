@@ -19,7 +19,7 @@ function Label:new(id, x, y, w, h, theme)
           id = id
           ,resizable = false
           ,width = w
-          ,height = w
+          ,height = h
           ,left = x
           ,top = y
           ,opacity = 1
