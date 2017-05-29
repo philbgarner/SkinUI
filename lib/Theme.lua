@@ -58,6 +58,8 @@ function Theme:new(images, dimensions)
   if images.textinput == nil then images.textinput = "lib/themes/default/textinput_242x35.png" end
   if images.button_med == nil then images.button_med = "lib/themes/default/button_225x40.png" end
   if images.button_down_med == nil then images.button_down_med = "lib/themes/default/button_down_225x40.png" end
+  if images.button_small == nil then images.button_small = "lib/themes/default/button_60x30.png" end
+  if images.button_down_small == nil then images.button_down_small = "lib/themes/default/button_down_60x30.png" end
   if images.textbox_bg == nil then images.textbox_bg = "lib/themes/default/container_bg.png" end
   if images.textbox_ne == nil then images.textbox_ne = "lib/themes/default/container_ne.png" end
   if images.textbox_nw == nil then images.textbox_nw = "lib/themes/default/container_nw.png" end
@@ -83,6 +85,8 @@ function Theme:new(images, dimensions)
   images.textinput = love.graphics.newImage(images.textinput)
   images.button_med = love.graphics.newImage(images.button_med)
   images.button_down_med = love.graphics.newImage(images.button_down_med)
+  images.button_small = love.graphics.newImage(images.button_small)
+  images.button_down_small = love.graphics.newImage(images.button_down_small)
   images.textbox_bg = love.graphics.newImage(images.textbox_bg)
   images.textbox_ne = love.graphics.newImage(images.textbox_ne)
   images.textbox_se = love.graphics.newImage(images.textbox_se)

@@ -390,6 +390,7 @@ function Window:render(scale)
   
   local canv = love.graphics.newCanvas(self:get("width"), self:get("height"))
   local thm = self:get("theme")
+
   local q = love.graphics.newQuad(
       0
       ,0

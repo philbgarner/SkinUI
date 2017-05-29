@@ -17,10 +17,16 @@ skinui.Container = require "lib.Container"
 skinui.Textbox = require "lib.Textbox"
 skinui.Label = require "lib.Label"
 skinui.Lineinput = require "lib.Lineinput"
+skinui.ButtonSmall = require "lib.Button-Small"
+skinui.Image = require "lib.Image"
 
 function skinui:load()
-  skinui.theme = themes:new()
-  
+  skinui.theme = {}
+  skinui.theme.default = themes:new()
+  skinui.theme.default_red = themes:new({
+          images = {bgimage = "lib/themes/default_red/bgimage.png"}
+        })
+      
   love.keyboard.setKeyRepeat(true)
   
   skinui.windows = {}
