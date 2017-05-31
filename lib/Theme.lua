@@ -60,6 +60,8 @@ function Theme:new(images, dimensions)
   if images.button_down_med == nil then images.button_down_med = "lib/themes/default/button_down_225x40.png" end
   if images.button_small == nil then images.button_small = "lib/themes/default/button_60x30.png" end
   if images.button_down_small == nil then images.button_down_small = "lib/themes/default/button_down_60x30.png" end
+  if images.button_tiny == nil then images.button_tiny = "lib/themes/default/button_tiny_25x25.png" end
+  if images.button_down_tiny == nil then images.button_down_tiny = "lib/themes/default/button_down_tiny_25x25.png" end
   if images.textbox_bg == nil then images.textbox_bg = "lib/themes/default/container_bg.png" end
   if images.textbox_ne == nil then images.textbox_ne = "lib/themes/default/container_ne.png" end
   if images.textbox_nw == nil then images.textbox_nw = "lib/themes/default/container_nw.png" end
@@ -99,6 +101,8 @@ function Theme:new(images, dimensions)
   images.lineinput_right = love.graphics.newImage(images.lineinput_right)
   images.lineinput_left = love.graphics.newImage(images.lineinput_left)
   images.lineinput = love.graphics.newImage(images.lineinput)
+  images.button_tiny = love.graphics.newImage(images.button_tiny)
+  images.button_down_tiny = love.graphics.newImage(images.button_down_tiny)
   
   images.bg_image:setWrap(repeatStyle, repeatStyle)
   images.corner_nw:setWrap(repeatStyle, repeatStyle)

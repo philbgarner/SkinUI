@@ -19,6 +19,8 @@ skinui.Label = require "lib.Label"
 skinui.Lineinput = require "lib.Lineinput"
 skinui.ButtonSmall = require "lib.Button-Small"
 skinui.Image = require "lib.Image"
+skinui.Listbox = require "lib.Listbox"
+skinui.ButtonTiny = require "lib.Button-Tiny"
 
 function skinui:load()
   skinui.theme = {}
