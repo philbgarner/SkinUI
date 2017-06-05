@@ -27,14 +27,16 @@ function Listbox:new(id, x, y, w, h, theme)
           ,height = h
           ,left = x
           ,top = y
-          ,scrollx = 0
-          ,scrolly = 0
+
           ,opacity = 1
           ,alwaysontop = false
           ,bg_autosize = false  -- If not autosize, then it tiles when the Listbox exceeds the background image size.
           ,theme = theme
           ,canvas = nil
           ,quad = nil
+          
+          ,scroll = 0
+          ,selectedIndex = 0
           
           ,windows = {}
           ,window_focusid = ""
@@ -50,16 +52,8 @@ function Listbox:new(id, x, y, w, h, theme)
     
     }
   setmetatable(win, Listbox)
-  win.upButton = btiny:new("btnUp", w - theme:get("images").textbox_nw:getWidth() - theme:get("images").textbox_ne:getWidth(), theme:get("images").textbox_ne:getHeight(), theme)
-  win.upButton:set("text", "U")
-  win.upButton:render(1)
-  win.downButton = btiny:new("btnDown", w - theme:get("images").textbox_sw:getWidth() - theme:get("images").textbox_se:getWidth(), h - theme:get("images").textbox_se:getHeight() - theme:get("images").textbox_ne:getHeight(), theme)
-  win.downButton:set("text", "D")
-  win.downButton:render(1)
-  table.insert(win.props.windows, win.upButton)
-  table.insert(win.props.windows, win.downButton)
-  
-  win:render()
+  win:render(1)
+  win:load()
   return win
   
 end
@@ -90,7 +84,7 @@ function Listbox:find(val, val2)
     term = val2
   end
   
-  for i=starat, #self.items do
+  for i=startat, #self.items do
     if term == self.items[i] then
       return i
     end
@@ -109,7 +103,7 @@ end
 function Listbox:get(prop)
     
   if self.props[prop] == nil then
-    return false
+    return false  
   end
   
   return self.props[prop]
@@ -156,26 +150,28 @@ end
 
 -- Master method
 function Listbox:click(x, y, button, istouch)
-  print("click!")
   local wnd = self:get("windows")
   local wx = self:get("left")
   local wy = self:get("top")
-  print(listclock)
   for i=1, #wnd do
-    print(i)
     if x >= wnd[i]:get("left") + wx and y >= wnd[i]:get("top") + wy and x <= wnd[i]:get("left") + wnd[i]:get("width") + wx and y <= wnd[i]:get("top") + wnd[i]:get("height") + wy then
-      print("click", i)
-      wnd[i]:onclick(x, y, button, istouch)
+      wnd[i]:onclick(wnd[i]:get("left") + wx + x, wnd[i]:get("top") + wy + y, button, istouch)
       return
     end
   end
-  self:onclick(x, y, button, istouch)
+  self:onclick(x - wx, y - wy, button, istouch)
 
 end
 -- User defined method.
 function Listbox:onclick(x, y, button, istouch)
 --  print(self:get("id"))
 --  print("click")
+
+  local rx = x - self:get("theme"):get("images").textbox_nw:getWidth()
+  local ry = y - self:get("theme"):get("images").textbox_nw:getHeight()
+  self:set("selectedIndex", math.floor(ry / 20 + 1))
+  print(self:get("selectedIndex"), y, ry)
+  self:render(1)
 end
 
 -- Master method
@@ -184,7 +180,29 @@ function Listbox:load()
 end
 -- User defined method.
 function Listbox:onload()
-  
+  local w = self:get("width")
+  local h = self:get("height")
+  local theme = self:get("theme")
+  local upButton = btiny:new("btnUp", w - theme:get("images").textbox_nw:getWidth() - theme:get("images").textbox_ne:getWidth(), theme:get("images").textbox_ne:getHeight(), theme)
+  local lb = self
+  upButton:set("text", "")
+  function upButton:onclick(x, y, button, istouch)
+    lb.props.scroll = lb.props.scroll - 1
+    lb:render(1)
+  end
+  upButton:render(1)
+  local downButton = btiny:new("btnDown", w - theme:get("images").textbox_sw:getWidth() - theme:get("images").textbox_se:getWidth(), h - theme:get("images").textbox_se:getHeight() - theme:get("images").textbox_ne:getHeight(), theme)
+  downButton:set("text", "")
+  function downButton:onclick(x, y, button, istouch)
+    lb.props.scroll = lb.props.scroll + 1
+    lb:render(1)
+  end
+  downButton:render(1)
+  local windows = self:get("windows")
+  table.insert(windows, upButton)
+  table.insert(windows, downButton)
+  self:set("windows", windows)
+  print(#windows .. " windows")
 end
 
 -- Master method
@@ -194,6 +212,15 @@ end
 -- User defined method.
 function Listbox:onunload()
   
+end
+
+function Listbox:getText()
+  local si = self:get("selectedIndex")
+  if si > 0 then
+    return self:get("items")[si]
+  else
+    return ""
+  end
 end
 
 -- Love2d Hook Methods
@@ -375,7 +402,17 @@ function Listbox:render(scale)
     local dx = thm:get("images").textbox_nw:getWidth()
     local dy = thm:get("images").textbox_ne:getHeight()
     local items = self:get("items")
-    for i=1, #items do
+    local scr = self:get("scroll")
+    local fnt = love.graphics.getFont()
+  
+    if scr < 1 then scr = 1 end
+    for i=scr, #items do
+      if i == self:get("selectedIndex") then
+        love.graphics.setColor(0, 0, 0, 200)
+        local tw = fnt:getWidth(items[i])
+        love.graphics.rectangle("fill", dx - 2, dy - 2, tw + 8, 20)
+        love.graphics.setColor(255, 255, 255)
+      end
       love.graphics.print(items[i], dx, dy)
       dy = dy + 20
     end

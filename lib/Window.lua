@@ -133,7 +133,7 @@ function Window:click(x, y, button, istouch)
   local wy = self:get("top")
   for i=1, #wnd do
     if x >= wnd[i]:get("left") + wx and y >= wnd[i]:get("top") + wy and x <= wnd[i]:get("left") + wnd[i]:get("width") + wx and y <= wnd[i]:get("top") + wnd[i]:get("height") + wy then
-      wnd[i]:click(x, y, button, istouch)
+      wnd[i]:click(x - wx, y - wy, button, istouch)
       return
     end
   end
