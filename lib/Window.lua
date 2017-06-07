@@ -365,6 +365,7 @@ function Window:textinput(t)
   
 end
 
+-- Master draw method.
 function Window:draw()
   if self:get("hidden") then return end
 
@@ -381,7 +382,13 @@ function Window:draw()
     end
   end
   
+  self:ondraw()
   love.graphics.setScissor(scx, scy, scw, sch)
+end
+
+-- Overload draw method (scissor of parent window applies).
+function Window:ondraw()
+  
 end
 
 -- Pre-render window for draw method.  Call this when your window is dirty.

@@ -34,7 +34,9 @@ function Listbox:new(id, x, y, w, h, theme)
           ,theme = theme
           ,canvas = nil
           ,quad = nil
-          
+
+          ,fontSize = 12
+
           ,scroll = 0
           ,selectedIndex = 0
           
@@ -159,6 +161,13 @@ function Listbox:click(x, y, button, istouch)
       return
     end
   end
+  local fontsize = self:get("fontSize") + 6
+
+  local rx = x - self:get("left") - self:get("theme"):get("images").textbox_nw:getWidth()
+  local ry = y - self:get("top") - self:get("theme"):get("images").textbox_nw:getHeight()
+  self:set("selectedIndex", math.floor(ry / fontsize + 1))
+
+  self:render(1)
   self:onclick(x - wx, y - wy, button, istouch)
 
 end
@@ -167,15 +176,11 @@ function Listbox:onclick(x, y, button, istouch)
 --  print(self:get("id"))
 --  print("click")
 
-  local rx = x - self:get("theme"):get("images").textbox_nw:getWidth()
-  local ry = y - self:get("theme"):get("images").textbox_nw:getHeight()
-  self:set("selectedIndex", math.floor(ry / 20 + 1))
-  print(self:get("selectedIndex"), y, ry)
-  self:render(1)
 end
 
 -- Master method
 function Listbox:load()
+  self:fontSize(self:get("fontSize"))
   self:onload()
 end
 -- User defined method.
@@ -202,7 +207,7 @@ function Listbox:onload()
   table.insert(windows, upButton)
   table.insert(windows, downButton)
   self:set("windows", windows)
-  print(#windows .. " windows")
+  
 end
 
 -- Master method
@@ -221,6 +226,11 @@ function Listbox:getText()
   else
     return ""
   end
+end
+
+
+function Listbox:fontSize(s)
+  self:set("fontSize", s)
 end
 
 -- Love2d Hook Methods
@@ -403,24 +413,27 @@ function Listbox:render(scale)
     local dy = thm:get("images").textbox_ne:getHeight()
     local items = self:get("items")
     local scr = self:get("scroll")
+    local fontsize = self:get("fontSize")
+    love.graphics.setFont(love.graphics.newFont(fontsize))
     local fnt = love.graphics.getFont()
-  
     if scr < 1 then scr = 1 end
     for i=scr, #items do
       if i == self:get("selectedIndex") then
         love.graphics.setColor(0, 0, 0, 200)
         local tw = fnt:getWidth(items[i])
-        love.graphics.rectangle("fill", dx - 2, dy - 2, tw + 8, 20)
+        love.graphics.rectangle("fill", dx - 2, dy - 2, tw + 8, fontsize + 6)
         love.graphics.setColor(255, 255, 255)
       end
+
       love.graphics.print(items[i], dx, dy)
-      dy = dy + 20
+      dy = dy + fontsize + 6
     end
     
   love.graphics.setCanvas()
   love.graphics.setScissor(scx, scy, scw, sch)
   self:set("canvas", love.graphics.newImage(canv:newImageData()))
   self:set("quad", q)
+  love.graphics.setFont(love.graphics.newFont(12))
   
 end
 

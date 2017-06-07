@@ -14,15 +14,15 @@
 local Textbox = {}
 Textbox.__index = Textbox
 
-function Textbox:new(id, x, y, theme)
+function Textbox:new(id, x, y, w, h, theme)
   
   local win = {
       
       props = {
           id = id
           ,resizable = false
-          ,width = theme:get("images").bg_image:getWidth()
-          ,height = theme:get("images").bg_image:getHeight()
+          ,width = w
+          ,height = h
           ,left = x
           ,top = y
           ,scrollx = 0
@@ -123,15 +123,6 @@ end
 
 -- Master method
 function Textbox:click(x, y, button, istouch)
-  local wnd = self:get("windows")
-  local wx = self:get("left")
-  local wy = self:get("top")
-  for i=1, #wnd do
-    if x >= wnd[i]:get("left") + wx and y >= wnd[i]:get("top") + wy and x <= wnd[i]:get("left") + wnd[i]:get("width") + wx and y <= wnd[i]:get("top") + wnd[i]:get("height") + wy then
-      wnd[i]:onclick(x, y, button, istouch)
-      return
-    end
-  end
   
   self:onclick(x, y, button, istouch)
 
@@ -285,6 +276,9 @@ function Textbox:draw(x, y)
   local tcol = 0
   local txt = self:get("text")
   local lc = 0
+  
+  love.graphics.setColor(255, 255, 255)
+  
   for line in txt:gmatch("[^\r\n]+") do
     love.graphics.print(line, self:get("left") + self:get("paddingx") + x + tcol, self:get("top") + self:get("paddingy") + y + tline)
     if self:get("hasFocus") and love.timer.getTime() % 1 > 0.5 and self:get("cursor_line") == lc then

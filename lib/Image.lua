@@ -62,6 +62,7 @@ function Image:set(prop, val)
       self:set("height", self.props[prop]:getHeight())
       self:render(1)
     elseif type(val) == "table" then
+      print("prop", val)
       self.props[prop] = val
       self:set("width", self.props[prop]:getWidth())
       self:set("height", self.props[prop]:getHeight())
