@@ -45,6 +45,10 @@ end
 
 function Lineinput:set(prop, val)
 
+  if prop == "text" and type(val) == "number" then
+    val = tostring(val)
+  end
+
   self.props[prop] = val
   
   return true

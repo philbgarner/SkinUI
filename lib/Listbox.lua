@@ -36,8 +36,9 @@ function Listbox:new(id, x, y, w, h, theme)
           ,quad = nil
 
           ,fontSize = 12
+          ,font = love.graphics.newFont(12)
 
-          ,scroll = 0
+          ,scroll = 1
           ,selectedIndex = 0
           
           ,windows = {}
@@ -162,10 +163,16 @@ function Listbox:click(x, y, button, istouch)
     end
   end
   local fontsize = self:get("fontSize") + 6
-
   local rx = x - self:get("left") - self:get("theme"):get("images").textbox_nw:getWidth()
   local ry = y - self:get("top") - self:get("theme"):get("images").textbox_nw:getHeight()
-  self:set("selectedIndex", math.floor(ry / fontsize + 1))
+  
+  -- Make sure the click wasn't on the borders.
+  if x >= rx + self:get("theme"):get("images").textbox_nw:getWidth() and x <= self:get("width") - self:get("theme"):get("images").textbox_nw:getWidth() and
+     y >= ry + self:get("theme"):get("images").textbox_nw:getHeight() and ry <= self:get("height") - self:get("theme"):get("images").textbox_nw:getHeight()
+  then
+    self:set("selectedIndex", math.floor(ry / fontsize + self:get("scroll")))
+    self:set("text", self:get("items")[self:get("selectedIndex")])
+  end
 
   self:render(1)
   self:onclick(x - wx, y - wy, button, istouch)
@@ -230,6 +237,8 @@ end
 
 
 function Listbox:fontSize(s)
+  local f = love.graphics.newFont(s)
+  self:set("font", f)
   self:set("fontSize", s)
 end
 
@@ -265,7 +274,40 @@ function Listbox:update(dt)
   
 end
 
+function Listbox:count()
+  return #self.props.items
+end
+
 function Listbox:keypressed(key, scancode)
+
+  print(key)
+  
+  if key == "end" then
+    self:set("selectedIndex", self:count())
+    self:set("scroll", self:get("selectedIndex"))
+    self:render(1)
+  elseif key == "pagedown" then
+    local linesize = self:get("fontSize") + 6
+    local pagehieght = math.floor((self:get("height") - self:get("theme"):get("images").textbox_nw:getHeight()) / linesize)
+    self:set("scroll", self:get("scroll") + pagehieght)
+    self:set("selectedIndex", self:get("scroll"))
+    self:render(1)
+  elseif key == "pageup" then
+    local linesize = self:get("fontSize") + 6
+    local pagehieght = math.floor((self:get("height") - self:get("theme"):get("images").textbox_nw:getHeight()) / linesize)
+    self:set("scroll", self:get("scroll") - pagehieght)
+    if self:get("scroll") < 1 then
+      self:set("scroll", 1)
+    end
+    self:set("selectedIndex", self:get("scroll"))
+    self:render(1)
+  elseif key == "up" then
+    self:set("selectedIndex", self:get("selectedIndex") - 1)
+    self:render(1)
+  elseif key == "down" then
+    self:set("selectedIndex", self:get("selectedIndex") + 1)
+    self:render(1)
+  end
 
   local wins = self:get("windows")
 

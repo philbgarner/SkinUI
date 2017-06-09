@@ -34,7 +34,7 @@ function Label:new(id, x, y, w, h, theme)
           
           ,hidden = false
           
-          ,font = love.graphics.getFont()
+          ,font = love.graphics.newFont(12)
           
           ,hasFocus = false
           ,downSprite = false
@@ -134,6 +134,8 @@ end
 -- Label-specific methods
 
 function Label:fontSize(s)
+  local f = love.graphics.newFont(s)
+  self:set("font", f)
   self:set("fontSize", s)
 end
 
@@ -189,7 +191,7 @@ function Label:draw(x, y)
   love.graphics.draw(self:get("canvas"), self:get("left") + x, self:get("top") + y)
   local colr = self:get("fontColr")
   love.graphics.setColor(colr[1], colr[2], colr[3], colr[4])
-  love.graphics.setFont(love.graphics.newFont(self:get("fontSize")))
+  love.graphics.setFont(self:get("font"))
   local fnt = love.graphics.getFont()
   love.graphics.print(self:get("text"), self:get("left") + x, self:get("top") + y)
   love.graphics.setColor(255, 255, 255)
