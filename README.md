@@ -81,8 +81,8 @@ Gives us this result:
 
 ![alt text](https://github.com/philbgarner/SkinUI/blob/master/SkinUI-SampleScreenshot.png "Textinput and OK button on a window.")
 
-Windows are the base control onto which you can add other controls using the ```lua skinui:add(window_object)``` method.  Register
-controls with their parent window using the ```lua skinui:addChild(windowName, control_object)``` method.
+Windows are the base control onto which you can add other controls using the ```skinui:add(window_object)``` method.  Register
+controls with their parent window using the ```skinui:addChild(windowName, control_object)``` method.
 
 ## Controls
 
@@ -134,7 +134,7 @@ skinui:addChild("winMain", lblScore)
 
 Buttons consist of two images: an up and a down state.
 
-The two images are mapped in the theme under ```lua images.button_med``` and ```lua images.button_down_med```.  The control's area will
+The two images are mapped in the theme under ```images.button_med``` and ```images.button_down_med```.  The control's area will
 adjust to match the size of the image.
 
 #### New Control
@@ -155,7 +155,7 @@ skinui:addChild("winMain", btnOK)
 
 Buttons consist of two images: an up and a down state.
 
-The two images are mapped in the theme under ```lua images.button_small``` and ```lua images.button_down_small```.  The control's area will
+The two images are mapped in the theme under ```images.button_small``` and ```images.button_down_small```.  The control's area will
 adjust to match the size of the image.
 
 #### New Control
@@ -175,7 +175,7 @@ skinui:addChild("winMain", btnOK)
 
 Buttons consist of two images: an up and a down state.
 
-The two images are mapped in the theme under ```lua images.button_tiny``` and ```lua images.button_down_tiny```.  The control's area will
+The two images are mapped in the theme under ```images.button_tiny``` and ```images.button_down_tiny```.  The control's area will
 adjust to match the size of the image.
 
 #### New Control
@@ -195,7 +195,7 @@ skinui:addChild("winMain", btnOK)
 
 Image controls display an image on the specified window.
 
-Use the ``lua function Image:set(prop, val)``` function to specify the image
+Use the ```function Image:set(prop, val)``` function to specify the image
 for the control.  If prop is "image" and val is a string, then it will attempt
 to find the image at that file location.  If a Love2D Drawable is passed as val,
 the Image control will use that instead.
