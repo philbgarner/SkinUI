@@ -152,6 +152,45 @@ function Listbox:onresize()
 end
 
 -- Master method
+function Listbox:change(i)
+  local linesize = self:get("fontSize") + 6
+  local pageheight = math.floor((self:get("height") - self:get("theme"):get("images").textbox_nw:getHeight() - self:get("theme"):get("images").textbox_sw:getHeight()) / linesize)
+  
+  self:set("selectedIndex", i)
+  if self:get("selectedIndex") > self:count() then
+    self:set("selectedIndex", self:count())
+  end
+  if self:get("selectedIndex") < 1 then
+    self:set("selectedIndex", 1)
+  end
+  if self:get("scroll") > self:get("selectedIndex") then
+    self:set("scroll", self:get("selectedIndex"))
+  elseif self:get("selectedIndex") > self:get("scroll") + pageheight then
+    self:set("scroll", self:get("selectedIndex"))
+  end
+  self:set("text", self:get("items")[self:get("selectedIndex")])
+  self:onchange(self:get("selectedIndex"))
+end
+-- User defined method.
+function Listbox:onchange(i)
+end
+
+-- Master method
+function Listbox:scroll(i)
+  self:set("scroll", i)
+  if self:get("scroll") > self:count() then
+    self:set("scroll", self:count())
+  elseif self:get("scroll") < 1 then
+    self:set("scroll", 1)
+  end
+  self:onscroll(i)
+end
+-- User defined method.
+function Listbox:onscroll(i)
+  
+end
+
+-- Master method
 function Listbox:click(x, y, button, istouch)
   local wnd = self:get("windows")
   local wx = self:get("left")
@@ -168,10 +207,9 @@ function Listbox:click(x, y, button, istouch)
   
   -- Make sure the click wasn't on the borders.
   if x >= rx + self:get("theme"):get("images").textbox_nw:getWidth() and x <= self:get("width") - self:get("theme"):get("images").textbox_nw:getWidth() and
-     y >= ry + self:get("theme"):get("images").textbox_nw:getHeight() and ry <= self:get("height") - self:get("theme"):get("images").textbox_nw:getHeight()
+     y >= ry + self:get("theme"):get("images").textbox_nw:getHeight() and ry <= self:get("height") - self:get("theme"):get("images").textbox_nw:getHeight() - self:get("theme"):get("images").textbox_sw:getHeight()
   then
-    self:set("selectedIndex", math.floor(ry / fontsize + self:get("scroll")))
-    self:set("text", self:get("items")[self:get("selectedIndex")])
+    self:change(math.floor(ry / fontsize + self:get("scroll")))
   end
 
   self:render(1)
@@ -192,12 +230,17 @@ function Listbox:load()
 end
 -- User defined method.
 function Listbox:onload()
+  local imgArrowUp = self:get("theme"):get("images").icons_15x15_arrowUp
+  local imgArrowDown = self:get("theme"):get("images").icons_15x15_arrowDown
   local w = self:get("width")
   local h = self:get("height")
   local theme = self:get("theme")
   local upButton = btiny:new("btnUp", w - theme:get("images").textbox_nw:getWidth() - theme:get("images").textbox_ne:getWidth(), theme:get("images").textbox_ne:getHeight(), theme)
   local lb = self
   upButton:set("text", "")
+  function upButton:ondraw(x, y)
+    love.graphics.draw(imgArrowUp, self:get("left") + x + 5, self:get("top") + y + 5)
+  end
   function upButton:onclick(x, y, button, istouch)
     lb.props.scroll = lb.props.scroll - 1
     lb:render(1)
@@ -205,9 +248,12 @@ function Listbox:onload()
   upButton:render(1)
   local downButton = btiny:new("btnDown", w - theme:get("images").textbox_sw:getWidth() - theme:get("images").textbox_se:getWidth(), h - theme:get("images").textbox_se:getHeight() - theme:get("images").textbox_ne:getHeight(), theme)
   downButton:set("text", "")
-  function downButton:onclick(x, y, button, istouch)
+  function downButton:onclick(x, y)
     lb.props.scroll = lb.props.scroll + 1
     lb:render(1)
+  end
+  function downButton:ondraw(x, y)
+    love.graphics.draw(imgArrowDown, self:get("left") + x + 5, self:get("top") + y + 5)
   end
   downButton:render(1)
   local windows = self:get("windows")
@@ -281,31 +327,28 @@ end
 function Listbox:keypressed(key, scancode)
 
   print(key)
+  local linesize = self:get("fontSize") + 6
+  local pageheight = math.floor((self:get("height") - self:get("theme"):get("images").textbox_nw:getHeight() - self:get("theme"):get("images").textbox_sw:getHeight()) / linesize)
   
   if key == "end" then
-    self:set("selectedIndex", self:count())
-    self:set("scroll", self:get("selectedIndex"))
+    self:change(self:count())
+    self:scroll(self:get("selectedIndex") - pageheight)
+    self:render(1)
+  elseif key == "home" then
+    self:change(1)
+    self:scroll(1)
     self:render(1)
   elseif key == "pagedown" then
-    local linesize = self:get("fontSize") + 6
-    local pagehieght = math.floor((self:get("height") - self:get("theme"):get("images").textbox_nw:getHeight()) / linesize)
-    self:set("scroll", self:get("scroll") + pagehieght)
-    self:set("selectedIndex", self:get("scroll"))
+    self:change(self:get("selectedIndex") + pageheight)
     self:render(1)
   elseif key == "pageup" then
-    local linesize = self:get("fontSize") + 6
-    local pagehieght = math.floor((self:get("height") - self:get("theme"):get("images").textbox_nw:getHeight()) / linesize)
-    self:set("scroll", self:get("scroll") - pagehieght)
-    if self:get("scroll") < 1 then
-      self:set("scroll", 1)
-    end
-    self:set("selectedIndex", self:get("scroll"))
+    self:change(self:get("selectedIndex") - pageheight)
     self:render(1)
   elseif key == "up" then
-    self:set("selectedIndex", self:get("selectedIndex") - 1)
+    self:change(self:get("selectedIndex") - 1)
     self:render(1)
   elseif key == "down" then
-    self:set("selectedIndex", self:get("selectedIndex") + 1)
+    self:change(self:get("selectedIndex") + 1)
     self:render(1)
   end
 
@@ -361,7 +404,9 @@ end
 -- Pre-render Listbox for draw method.  Call this when your Listbox is dirty.
 function Listbox:render(scale)
   if scale == nil then scale = 1 end
-  
+  local linesize = self:get("fontSize") + 6
+  local pageheight = math.floor((self:get("height") - self:get("theme"):get("images").textbox_nw:getHeight() - self:get("theme"):get("images").textbox_sw:getHeight()) / linesize)
+
   local canv = love.graphics.newCanvas(self:get("width"), self:get("height"))
   local thm = self:get("theme")
   local q = love.graphics.newQuad(
@@ -458,8 +503,10 @@ function Listbox:render(scale)
     local fontsize = self:get("fontSize")
     love.graphics.setFont(love.graphics.newFont(fontsize))
     local fnt = love.graphics.getFont()
+    local scrend = #items
     if scr < 1 then scr = 1 end
-    for i=scr, #items do
+    if scrend > scr + pageheight then scrend = scr + pageheight end
+    for i=scr, scrend do
       if i == self:get("selectedIndex") then
         love.graphics.setColor(0, 0, 0, 200)
         local tw = fnt:getWidth(items[i])

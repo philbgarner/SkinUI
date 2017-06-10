@@ -41,10 +41,21 @@ function Theme:new(images, dimensions)
 
       ,button_med = {}
       ,button_down_med = {}
+
     }
   end
 
   local repeatStyle = "repeat"  -- or use "mirroredrepeat"
+
+  -- Icons
+  
+  if images.icons_15x15_arrowUp == nil then images.icons_15x15_arrowUp = "lib/themes/default/arrow_up15x15.png" end
+  if images.icons_15x15_arrowDown == nil then images.icons_15x15_arrowDown = "lib/themes/default/arrow_down15x15.png" end
+
+  images.icons_15x15_arrowUp = love.graphics.newImage(images.icons_15x15_arrowUp)
+  images.icons_15x15_arrowDown = love.graphics.newImage(images.icons_15x15_arrowDown)
+
+  -- Skinning Elements
 
   if images.bg_image == nil then images.bg_image = "lib/themes/default/bgimage.png" end
   if images.corner_nw == nil then images.corner_nw = "lib/themes/default/corner_nw.png" end

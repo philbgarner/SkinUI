@@ -173,6 +173,7 @@ function ButtonTiny:ButtonTiny(t)
   
 end
 
+-- Master method.
 function ButtonTiny:draw(x, y)
   if x == nil then x = 0 end
   if y == nil then y = 0 end
@@ -198,6 +199,13 @@ function ButtonTiny:draw(x, y)
   love.graphics.print(self:get("text"), self:get("left") + cx + x, self:get("top") + 8 + y + cy)
   love.graphics.setColor(255, 255, 255)
   love.graphics.setScissor(scx, scy, scw, sch)
+  
+  self:ondraw(x, y)
+end
+
+-- User defined method.
+function ButtonTiny:ondraw(x, y)
+  
 end
 
 -- Pre-render ButtonTiny for draw method.  Call this when your ButtonTiny is dirty.
