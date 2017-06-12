@@ -44,7 +44,7 @@ end
 
 5. Start adding windows and controls!  As a general rule, windows are added to the root node (skinui library itself) while controls are added to the window as a child.  The exception will be container type objects which allow scrolling, etc (future state).
 
-## Sample Code
+## Example Code
 
 A simple text input dialog, created in the love.load() function:
 

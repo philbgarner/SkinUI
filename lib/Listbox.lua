@@ -11,7 +11,7 @@
   
 ]]--
 
-local btiny = require "lib.Button-Tiny"
+local VScrollbar = require "lib.VScrollbar"
 
 local Listbox = {}
 Listbox.__index = Listbox
@@ -65,6 +65,10 @@ function Listbox:add(text)
   local items = self:get("items")
   table.insert(items, text)
   self:set("items", items)
+  local vs = self:get("vscroll")
+  vs:set("scroll_max", self:count())
+  vs:render(1)
+  self:set("vscroll", vs)
   self:render(1)
 end
 
@@ -169,6 +173,12 @@ function Listbox:change(i)
     self:set("scroll", self:get("selectedIndex"))
   end
   self:set("text", self:get("items")[self:get("selectedIndex")])
+
+  local vs = self:get("vscroll")
+  vs:set("scroll", self:get("scroll"))
+  vs:render(1)
+  self:set("vscroll", vs)
+  
   self:onchange(self:get("selectedIndex"))
 end
 -- User defined method.
@@ -192,15 +202,14 @@ end
 
 -- Master method
 function Listbox:click(x, y, button, istouch)
-  local wnd = self:get("windows")
   local wx = self:get("left")
   local wy = self:get("top")
-  for i=1, #wnd do
-    if x >= wnd[i]:get("left") + wx and y >= wnd[i]:get("top") + wy and x <= wnd[i]:get("left") + wnd[i]:get("width") + wx and y <= wnd[i]:get("top") + wnd[i]:get("height") + wy then
-      wnd[i]:onclick(wnd[i]:get("left") + wx + x, wnd[i]:get("top") + wy + y, button, istouch)
-      return
-    end
-  end
+--  for i=1, #wnd do
+--    if x >= wnd[i]:get("left") + wx and y >= wnd[i]:get("top") + wy and x <= wnd[i]:get("left") + wnd[i]:get("width") + wx and y <= wnd[i]:get("top") + wnd[i]:get("height") + wy then
+--      wnd[i]:onclick(wnd[i]:get("left") + wx + x, wnd[i]:get("top") + wy + y, button, istouch)
+--      return
+--    end
+--  end
   local fontsize = self:get("fontSize") + 6
   local rx = x - self:get("left") - self:get("theme"):get("images").textbox_nw:getWidth()
   local ry = y - self:get("top") - self:get("theme"):get("images").textbox_nw:getHeight()
@@ -210,6 +219,11 @@ function Listbox:click(x, y, button, istouch)
      y >= ry + self:get("theme"):get("images").textbox_nw:getHeight() and ry <= self:get("height") - self:get("theme"):get("images").textbox_nw:getHeight() - self:get("theme"):get("images").textbox_sw:getHeight()
   then
     self:change(math.floor(ry / fontsize + self:get("scroll")))
+  end
+
+  local vs = self:get("vscroll")
+  if x >= vs:get("left") + wx and y >= vs:get("top") + wy and x <= vs:get("left") + vs:get("width") + wx and y <= vs:get("top") + vs:get("height") + wy then
+    vs:click(x - wx, y - wy, button, istouch)
   end
 
   self:render(1)
@@ -226,41 +240,26 @@ end
 -- Master method
 function Listbox:load()
   self:fontSize(self:get("fontSize"))
+  
+  local vs = VScrollbar:new("vscroll", self:get("width")
+                      - self:get("theme"):get("images").vscroll_body:getWidth()
+                      - self:get("theme"):get("images").corner_ne:getWidth()
+      , self:get("theme"):get("images").corner_ne:getHeight(), self:get("height")
+            - self:get("theme"):get("images").corner_se:getHeight()
+            - self:get("theme"):get("images").corner_ne:getHeight()
+      , self:get("theme"))
+  local lb = self
+  function vs:onscroll(v)
+    lb:set("scroll", v)
+  end
+  
+  self:set("vscroll", vs)
+    
   self:onload()
 end
 -- User defined method.
 function Listbox:onload()
-  local imgArrowUp = self:get("theme"):get("images").icons_15x15_arrowUp
-  local imgArrowDown = self:get("theme"):get("images").icons_15x15_arrowDown
-  local w = self:get("width")
-  local h = self:get("height")
-  local theme = self:get("theme")
-  local upButton = btiny:new("btnUp", w - theme:get("images").textbox_nw:getWidth() - theme:get("images").textbox_ne:getWidth(), theme:get("images").textbox_ne:getHeight(), theme)
-  local lb = self
-  upButton:set("text", "")
-  function upButton:ondraw(x, y)
-    love.graphics.draw(imgArrowUp, self:get("left") + x + 5, self:get("top") + y + 5)
-  end
-  function upButton:onclick(x, y, button, istouch)
-    lb.props.scroll = lb.props.scroll - 1
-    lb:render(1)
-  end
-  upButton:render(1)
-  local downButton = btiny:new("btnDown", w - theme:get("images").textbox_sw:getWidth() - theme:get("images").textbox_se:getWidth(), h - theme:get("images").textbox_se:getHeight() - theme:get("images").textbox_ne:getHeight(), theme)
-  downButton:set("text", "")
-  function downButton:onclick(x, y)
-    lb.props.scroll = lb.props.scroll + 1
-    lb:render(1)
-  end
-  function downButton:ondraw(x, y)
-    love.graphics.draw(imgArrowDown, self:get("left") + x + 5, self:get("top") + y + 5)
-  end
-  downButton:render(1)
-  local windows = self:get("windows")
-  table.insert(windows, upButton)
-  table.insert(windows, downButton)
-  self:set("windows", windows)
-  
+
 end
 
 -- Master method
@@ -388,15 +387,7 @@ function Listbox:draw(x, y)
   love.graphics.setScissor(self:get("left") + x, self:get("top") + y, nw * 2, nh * 2)
   love.graphics.draw(self:get("canvas"), self:get("left") + x, self:get("top") + y)
 
-    
-  local wins = self:get("windows")
-  if #wins > 0 then
-    for i=#wins, 1, -1 do
-      local wx = wins[i]:get("left")
-      local wy = wins[i]:get("top")
-      wins[i]:draw(self:get("left") + x, self:get("top") + y)
-    end
-  end
+  self:get("vscroll"):draw(self:get("left") + x, self:get("top") + y)
 
   love.graphics.setScissor(scx, scy, scw, sch)
 end

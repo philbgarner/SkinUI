@@ -85,6 +85,10 @@ function Theme:new(images, dimensions)
   if images.lineinput == nil then images.lineinput = "lib/themes/default/lineinput_120x35.png" end
   if images.lineinput_left == nil then images.lineinput_left = "lib/themes/default/lineinput_left_5x35.png" end
   if images.lineinput_right == nil then images.lineinput_right = "lib/themes/default/lineinput_right_5x35.png" end
+  if images.vscroll_body == nil then images.vscroll_body = "lib/themes/default/scrollbar_body.png" end
+  if images.vscroll_top == nil then images.vscroll_top = "lib/themes/default/scrollbar_top.png" end
+  if images.vscroll_bottom == nil then images.vscroll_bottom = "lib/themes/default/scrollbar_bottom.png" end
+  if images.vscroll_carat == nil then images.vscroll_carat = "lib/themes/default/scrollbar_carat.png" end
       
   images.bg_image = love.graphics.newImage(images.bg_image)
   images.corner_nw = love.graphics.newImage(images.corner_nw)
@@ -114,6 +118,10 @@ function Theme:new(images, dimensions)
   images.lineinput = love.graphics.newImage(images.lineinput)
   images.button_tiny = love.graphics.newImage(images.button_tiny)
   images.button_down_tiny = love.graphics.newImage(images.button_down_tiny)
+  images.vscroll_body = love.graphics.newImage(images.vscroll_body)
+  images.vscroll_top = love.graphics.newImage(images.vscroll_top)
+  images.vscroll_bottom = love.graphics.newImage(images.vscroll_bottom)
+  images.vscroll_carat = love.graphics.newImage(images.vscroll_carat)
   
   images.bg_image:setWrap(repeatStyle, repeatStyle)
   images.corner_nw:setWrap(repeatStyle, repeatStyle)
