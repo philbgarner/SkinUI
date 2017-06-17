@@ -123,6 +123,7 @@ end
 
 -- Master method
 function Lineinput:unload()
+  self:set("canvas", nil)
   self:onunload()
 end
 -- User defined method.

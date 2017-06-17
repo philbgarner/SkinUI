@@ -149,6 +149,7 @@ end
 
 -- Master method
 function Container:unload()
+  self:set("canvas", nil)
   self:onunload()
 end
 -- User defined method.

@@ -144,6 +144,7 @@ end
 
 -- Master method
 function Textbox:unload()
+  self:set("canvas", nil)
   self:onunload()
 end
 -- User defined method.

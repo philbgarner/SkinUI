@@ -31,7 +31,7 @@ function Image:new(id, x, y, theme)
           ,image = nil
           
           ,text = ""
-          ,fontSize = 12
+
           ,fontColr = {255, 255, 255, 255}
           
           ,hidden = false
@@ -131,7 +131,6 @@ end
 
 -- Master method
 function Image:load()
-  self:fontSize(self:get("fontSize"))
   self:onload()
 end
 -- User defined method.
@@ -141,17 +140,13 @@ end
 
 -- Master method
 function Image:unload()
+  self:set("image", nil)
+  self:set("canvas", nil)
   self:onunload()
 end
 -- User defined method.
 function Image:onunload()
   
-end
-
--- Image-specific methods
-
-function Image:fontSize(s)
-  self:set("fontSize", s)
 end
 
 -- Love2d Hook Methods
@@ -206,12 +201,9 @@ function Image:draw(x, y)
   love.graphics.draw(self:get("canvas"), self:get("left") + x, self:get("top") + y)
   local colr = self:get("fontColr")
   love.graphics.setColor(colr[1], colr[2], colr[3], colr[4])
-  love.graphics.setFont(love.graphics.newFont(self:get("fontSize")))
-  local fnt = love.graphics.getFont()
   love.graphics.print(self:get("text"), self:get("left") + x, self:get("top") + y)
   love.graphics.setColor(255, 255, 255)
   love.graphics.setScissor(scx, scy, scw, sch)
-  love.graphics.setFont(love.graphics.newFont(12))
 end
 
 -- Pre-render Image for draw method.  Call this when your Image is dirty.

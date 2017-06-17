@@ -158,6 +158,7 @@ end
 
 -- Master method
 function Window:unload()
+  self:set("canvas", nil)
   self:onunload()
 end
 -- User defined method.

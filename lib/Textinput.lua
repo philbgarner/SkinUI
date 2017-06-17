@@ -119,6 +119,7 @@ end
 
 -- Master method
 function Textinput:unload()
+  self:set("canvas", nil)
   self:onunload()
 end
 -- User defined method.

@@ -47,6 +47,7 @@ end
 
 function skinui:remove(id)
   if not skinui:find(id) then return false end
+  skinui.windows[skinui:find(id)]:unload()
   table.remove(skinui.windows, skinui:find(id))
   if #skinui.windows > 0 then skinui.window_focusid = skinui.windows[1]:get("id") else skinui.window_focusid = "" end
 end
@@ -84,6 +85,8 @@ function skinui:update(dt)
 
   mx = love.mouse.getX()
   my = love.mouse.getY()
+  
+  collectgarbage()
   
 end
 

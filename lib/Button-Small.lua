@@ -120,6 +120,7 @@ end
 
 -- Master method
 function ButtonSmall:unload()
+  self:set("canvas", nil)
   self:onunload()
 end
 -- User defined method.

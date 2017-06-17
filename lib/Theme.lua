@@ -89,7 +89,10 @@ function Theme:new(images, dimensions)
   if images.vscroll_top == nil then images.vscroll_top = "lib/themes/default/scrollbar_top.png" end
   if images.vscroll_bottom == nil then images.vscroll_bottom = "lib/themes/default/scrollbar_bottom.png" end
   if images.vscroll_carat == nil then images.vscroll_carat = "lib/themes/default/scrollbar_carat.png" end
-      
+  
+  if images.tooltip == nil then images.tooltip = "lib/themes/default/scrollbar_carat.png" end
+    
+  images.tooltip = love.graphics.newImage(images.tooltip)
   images.bg_image = love.graphics.newImage(images.bg_image)
   images.corner_nw = love.graphics.newImage(images.corner_nw)
   images.corner_sw = love.graphics.newImage(images.corner_sw)

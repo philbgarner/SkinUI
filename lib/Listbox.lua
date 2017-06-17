@@ -36,7 +36,6 @@ function Listbox:new(id, x, y, w, h, theme)
           ,quad = nil
 
           ,fontSize = 12
-          ,font = love.graphics.newFont(12)
 
           ,scroll = 1
           ,selectedIndex = 0
@@ -264,6 +263,7 @@ end
 
 -- Master method
 function Listbox:unload()
+  self:set("canvas", nil)
   self:onunload()
 end
 -- User defined method.
@@ -491,9 +491,8 @@ function Listbox:render(scale)
     local dy = thm:get("images").textbox_ne:getHeight()
     local items = self:get("items")
     local scr = self:get("scroll")
-    local fontsize = self:get("fontSize")
-    love.graphics.setFont(love.graphics.newFont(fontsize))
     local fnt = love.graphics.getFont()
+    local fontsize = self:get("fontSize")
     local scrend = #items
     if scr < 1 then scr = 1 end
     if scrend > scr + pageheight then scrend = scr + pageheight end
@@ -513,7 +512,7 @@ function Listbox:render(scale)
   love.graphics.setScissor(scx, scy, scw, sch)
   self:set("canvas", love.graphics.newImage(canv:newImageData()))
   self:set("quad", q)
-  love.graphics.setFont(love.graphics.newFont(12))
+  love.graphics.setFont(fnt)
   
 end
 

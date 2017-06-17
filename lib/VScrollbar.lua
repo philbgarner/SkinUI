@@ -175,6 +175,7 @@ end
 
 -- Master method
 function VScrollbar:unload()
+  self:set("canvas", nil)
   self:onunload()
 end
 -- User defined method.

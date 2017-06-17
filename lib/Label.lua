@@ -124,6 +124,8 @@ end
 
 -- Master method
 function Label:unload()
+  self:set("fontSize", nil)
+  self:set("canvas", nil)
   self:onunload()
 end
 -- User defined method.
@@ -191,12 +193,12 @@ function Label:draw(x, y)
   love.graphics.draw(self:get("canvas"), self:get("left") + x, self:get("top") + y)
   local colr = self:get("fontColr")
   love.graphics.setColor(colr[1], colr[2], colr[3], colr[4])
-  love.graphics.setFont(self:get("font"))
   local fnt = love.graphics.getFont()
+  love.graphics.setFont(self:get("font"))
   love.graphics.print(self:get("text"), self:get("left") + x, self:get("top") + y)
   love.graphics.setColor(255, 255, 255)
   love.graphics.setScissor(scx, scy, scw, sch)
-  love.graphics.setFont(love.graphics.newFont(12))
+  love.graphics.setFont(fnt)
 end
 
 -- Pre-render Label for draw method.  Call this when your Label is dirty.
