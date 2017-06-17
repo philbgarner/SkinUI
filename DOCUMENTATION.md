@@ -4,7 +4,7 @@ Several controls are predefined in this library, they can be most simply edited 
 themes folder and changing the graphics there.
 
 More compilicated changes may require implementing an all-new control.  See SkinUI.lua to see how controls are registered with the
-library.  Once they are registered there, they can be accessed from application code via ```skinui.ControlName.new()```, where
+library.  Once they are registered there, they can be accessed from application code via ```skinui.ControlName:new()```, where
 ControlName of course is the name of your custom control class.
 
 ### Window
@@ -38,7 +38,7 @@ You can prevent this behaviour by setting the window's ```fixed``` property:
   winMain:set("fixed", true)
 ```
 
-If you overload the ```Window:onload()``` function to create objects, be sure to also overload the ```Window:onunload()``` function
+If you create love2d objects and add them to the window as a property, be sure to also overload the ```Window:onunload()``` function
 to ensure they are deleted from the memory by setting them to nil.  SkinUI canvas and font objects will automatically be removed for
 garbage collection however you are responsible for any you create yourself.
 
@@ -159,7 +159,7 @@ function VScrollbar:new(id, x, y, h, theme)
 #### Example
 
 ```lua
-local vScroll = skinui.Image:new("vScroll", 50, 50, skinui.theme.default)
+local vScroll = skinui.VScrollbar:new("vScroll", 50, 50, skinui.theme.default)
 vScroll:set("scroll_max", 10)     -- Set the maximum scroll value.
 vScroll:set("scroll", 5)          -- Set the scroll progress to half-way.
 skinui:addChild("winMain", vScroll)
