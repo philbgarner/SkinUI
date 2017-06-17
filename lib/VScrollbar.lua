@@ -31,8 +31,8 @@ function VScrollbar:new(id, x, y, h, theme)
           ,canvas = nil
           ,quad = nil
           
-          ,scroll = "1"
-          ,scroll_max = "1"
+          ,scroll = 1
+          ,scroll_max = 1
           
           ,text = ""
           
