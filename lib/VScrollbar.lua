@@ -152,6 +152,12 @@ function VScrollbar:load()
     sc = sc - 1
     vs:scroll(sc)
   end
+  function btnDown:onunload()
+    self:set("icon", nil)
+  end
+  function btnUp:onunload()
+    self:set("icon", nil)
+  end
   function btnDown:ondraw(x, y)
     love.graphics.setColor(255, 255, 255, 175)
     love.graphics.draw(self:get("icon"), x + 5, y + 4 + self:get("top"))
@@ -176,6 +182,10 @@ end
 -- Master method
 function VScrollbar:unload()
   self:set("canvas", nil)
+  self:get("btnUp"):unload()
+  self:get("btnDown"):unload()
+  self:set("btnUp", nil)
+  self:set("btnDown", nil)
   self:onunload()
 end
 -- User defined method.

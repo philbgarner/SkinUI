@@ -21,6 +21,7 @@ skinui.ButtonSmall = require "lib.Button-Small"
 skinui.Image = require "lib.Image"
 skinui.Listbox = require "lib.Listbox"
 skinui.ButtonTiny = require "lib.Button-Tiny"
+skinui.Dropdown = require "lib.Dropdown"
 
 function skinui:load()
   skinui.theme = {}
@@ -120,27 +121,31 @@ function skinui:textinput(t)
   
 end
 
+function skinui:wheelmoved(x, y)
+ 
+  for i=1, #skinui.windows do
+    if skinui.window_focusid == skinui.windows[i]:get("id") then
+      return skinui.windows[i]:wheelmoved(x, y)
+    end
+  end
+  
+  return false
+ 
+end
 
 function skinui:mousepressed(x, y, button, istouch)
   
   skinui.windows[1]:blur()
   for i=1, #skinui.windows do
     local wn = skinui.windows[i] 
-    if x >= wn:get("left") and y >= wn:get("top") and x <= wn:get("left") + wn:get("width") and y <= wn:get("top") + wn:get("height") and skinui.window_focusid == wn:get("id") then
-      skinui.window_mousedownid = wn:get("id")
-      skinui.windows[i]:focus()
-      if i ~= 1 then
-        skinui:move(i, 1)
-      end
-      wn:mousepressed(x, y, button, istouch)
-    end
-      
+
     local wins = skinui.windows[i]:get("windows")
     local ox = skinui.windows[i]:get("left")
     local oy = skinui.windows[i]:get("top")
     if #wins > 0 then
       for j=1, #wins do
         if x >= wins[j]:get("left") + ox and y >= wins[j]:get("top") + oy and x <= wins[j]:get("left") + wins[j]:get("width") + ox and y <= wins[j]:get("top") + wins[j]:get("height") + oy then
+          skinui.window_mousedownid = wn:get("id")
           local blurid = skinui.windows[i]:find(skinui.windows[i]:get("window_focusid"))
           if blurid then
             wins[blurid]:blur()
@@ -148,11 +153,20 @@ function skinui:mousepressed(x, y, button, istouch)
           skinui.windows[i]:set("window_focusid", wins[j]:get("id"))
           wins[j]:focus()
           wins[j]:mousepressed(x, y, button, istouch)
-          return
+          return true
         end
       end
     end
     
+    if x >= wn:get("left") and y >= wn:get("top") and x <= wn:get("left") + wn:get("width") and y <= wn:get("top") + wn:get("height") and skinui.window_focusid == wn:get("id") then
+      skinui.window_mousedownid = wn:get("id")
+      skinui.windows[i]:focus()
+      if i ~= 1 then
+        skinui:move(i, 1)
+      end
+      wn:mousepressed(x, y, button, istouch)
+      return true
+    end    
   end
   
   return false

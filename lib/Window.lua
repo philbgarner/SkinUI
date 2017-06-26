@@ -175,6 +175,27 @@ function Window:show()
 end
 
 
+-- Master method
+function Window:wheelmoved(x, y)
+  print("wheelmoved window", y)
+  local wnd = self:get("windows")
+  for i=1, #wnd do
+    if self.window_focusid == wnd[i]:get("id") then
+      wnd[i]:wheelmoved(x, y)
+      return true
+    end
+  end
+  self:onwheelmoved(x, y)
+  
+  return false
+ 
+end
+
+-- User defined method.
+function Window:onwheelmoved(x, y)
+  
+end
+
 -- Love2d Hook Methods
 
 function Window:mousepressed(x, y, button, istouch)

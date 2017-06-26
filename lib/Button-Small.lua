@@ -177,6 +177,7 @@ end
 function ButtonSmall:draw(x, y)
   if x == nil then x = 0 end
   if y == nil then y = 0 end
+  local theme = self:get("theme")
   
   local scx, scy, scw, sch = love.graphics.getScissor( )
 
@@ -188,7 +189,11 @@ function ButtonSmall:draw(x, y)
     love.graphics.setScissor(self:get("left") + x, self:get("top") + y, nw, nh)
   end
   love.graphics.draw(self:get("canvas"), self:get("left") + x, self:get("top") + y)
-  love.graphics.setColor(25, 25, 25)
+  if not self:get("downSprite") then
+    love.graphics.setColor(theme:get("styles").button.normal.font_colr)
+  else
+    love.graphics.setColor(theme:get("styles").button.pressed.font_colr)
+  end
   local fnt = love.graphics.getFont()
   local cx = self:get("width") / 2 - fnt:getWidth(self:get("text")) / 2
   local cy = 0
