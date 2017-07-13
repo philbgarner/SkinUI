@@ -61,6 +61,18 @@ function skinui:addChild(id, obj)
   skinui.windows[index]:set("windows", win)
 end
 
+
+function skinui:removeChild(id, objid)
+  local index = skinui:find(id)
+  local par = skinui:get("windows")
+  if not index then return end
+  if par and par[index]:find(objid) then
+    table.remove(par, par:find(objid))
+  end
+  skinui.windows[index]:set("windows", par)
+end
+
+
 function skinui:find(id) 
   for i=1, #skinui.windows do
     if skinui.windows[i]:get("id") == id then

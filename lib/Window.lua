@@ -397,14 +397,14 @@ function Window:draw()
   love.graphics.draw(self:get("canvas"), self:get("left"), self:get("top"))
 
   local wins = self:get("windows")
-
+  
+  self:ondraw()
   if #wins > 0 then
     for i=#wins, 1, -1 do
       wins[i]:draw(self:get("left"), self:get("top"))
     end
   end
-  
-  self:ondraw()
+
   love.graphics.setScissor(scx, scy, scw, sch)
 end
 

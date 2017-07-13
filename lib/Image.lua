@@ -52,7 +52,6 @@ function Image:new(id, x, y, theme)
 end
 
 function Image:set(prop, val)
-
   if prop ~= "image" then
     self.props[prop] = val
   else
@@ -61,8 +60,7 @@ function Image:set(prop, val)
       self:set("width", self.props[prop]:getWidth())
       self:set("height", self.props[prop]:getHeight())
       self:render(1)
-    elseif type(val) == "table" then
-      print("prop", val)
+    elseif type(val) == "userdata" then
       self.props[prop] = val
       self:set("width", self.props[prop]:getWidth())
       self:set("height", self.props[prop]:getHeight())
